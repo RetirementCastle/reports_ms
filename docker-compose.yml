@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: '123456'
+      MYSQL_DATABASE: 'reports'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: '123456'
+    ports:
+      - "3309:3309"
+
+  web:
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8005"
+    container_name: retirement
+    volumes:
+      - .:/retirement
+    depends_on:
+      - db
+    ports:
+      - "8005:8005"
